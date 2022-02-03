@@ -14,9 +14,7 @@ services:
       - ${SQL_PORT:-5432}
     restart: on-failure
   web:
-    build: 
-      context: ./
-    image: mobile_audit
+    image: cryeye/mobile-audit:latest
     env_file:
       - ./.env.example
     entrypoint: [ '/web_entrypoint.sh' ]
@@ -52,7 +50,7 @@ services:
       - web
     restart: on-failure
   worker:
-    image: mobile_audit
+    image: cryeye/mobile-audit:latest
     env_file:
       - ./.env.example
     entrypoint: [ '/worker_entrypoint.sh' ]
