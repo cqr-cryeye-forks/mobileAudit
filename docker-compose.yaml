@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.7'
 services:
   db:
     image: postgres:13.4@sha256:97e5e91582e89514277912d4b7c95bceabdede3482e32395bcb40099abd9c506
@@ -21,7 +21,7 @@ services:
       - ./.env.example
     entrypoint: [ '/web_entrypoint.sh' ]
     volumes:
-      - .:/app
+      - app-data:/app
     expose:
       - "8000"
     depends_on:
@@ -32,7 +32,7 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - .:/app
+      - app-data:/app
       - ./nginx/app.conf:/etc/nginx/conf.d/app.conf
     depends_on:
       - web
@@ -45,7 +45,7 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
     volumes:
-      - ./rabbitmq/logs/:/var/log/rabbitmq/
+      - rabbitmq-logs-data:/var/log/rabbitmq/
     expose:
       - "5672"
     depends_on:
@@ -57,7 +57,7 @@ services:
       - ./.env.example
     entrypoint: [ '/worker_entrypoint.sh' ]
     volumes:
-      - .:/app
+      - app-data:/app
     links:
       - rabbitmq
       - web
@@ -66,3 +66,5 @@ services:
     restart: on-failure
 volumes:
   db-data:
+  app-data:
+  rabbitmq-logs-data:
